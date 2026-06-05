@@ -21,7 +21,7 @@ def get_chemical_inventories(station_id: int = None, db: Session = Depends(get_d
     return query.all()
 
 
-@router.post("/inventory", response_model=ChemicalInventoryResponse])
+@router.post("/inventory", response_model=ChemicalInventoryResponse)
 def create_chemical_inventory(inventory: ChemicalInventoryCreate, db: Session = Depends(get_db)):
     station = db.query(Station).filter(Station.id == inventory.station_id).first()
     if not station:
@@ -49,7 +49,7 @@ def get_chemical_records(inventory_id: int = None, db: Session = Depends(get_db)
     return query.order_by(ChemicalRecord.created_at.desc()).all()
 
 
-@router.post("/records", response_model=ChemicalRecordResponse])
+@router.post("/records", response_model=ChemicalRecordResponse)
 def create_chemical_record(record: ChemicalRecordCreate, db: Session = Depends(get_db)):
     inventory = db.query(ChemicalInventory).filter(
         ChemicalInventory.id == record.inventory_id
@@ -93,7 +93,7 @@ def create_chemical_record(record: ChemicalRecordCreate, db: Session = Depends(g
     return db_record
 
 
-@router.put("/inventory/{inventory_id}", response_model=ChemicalInventoryResponse])
+@router.put("/inventory/{inventory_id}", response_model=ChemicalInventoryResponse)
 def update_chemical_inventory(inventory_id: int, inventory: ChemicalInventoryCreate, db: Session = Depends(get_db)):
     db_inventory = db.query(ChemicalInventory).filter(
         ChemicalInventory.id == inventory_id

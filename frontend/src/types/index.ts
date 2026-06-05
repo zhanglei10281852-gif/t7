@@ -91,3 +91,43 @@ export interface ComplianceRateData {
   rate: number;
   station: string;
 }
+
+export interface InspectionPlan {
+  id: number;
+  station_id: number;
+  name: string;
+  frequency: string;
+  inspector: string;
+  is_active: boolean;
+}
+
+export interface InspectionRecord {
+  id: number;
+  plan_id: number;
+  inspection_date: string;
+  equipment_status?: string;
+  photo_path?: string;
+  problem_description?: string;
+  created_at: string;
+  is_overdue: boolean;
+}
+
+export interface ChemicalInventory {
+  id: number;
+  station_id: number;
+  chemical_type: string;
+  current_quantity: number;
+  safe_quantity: number;
+  unit: string;
+  last_updated: string;
+}
+
+export interface ChemicalRecord {
+  id: number;
+  inventory_id: number;
+  record_type: string;
+  quantity: number;
+  operator?: string;
+  remark?: string;
+  created_at: string;
+}

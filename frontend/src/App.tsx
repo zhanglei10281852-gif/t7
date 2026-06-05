@@ -1,96 +1,87 @@
 import React from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { Layout, Menu, theme } from 'antd';
+import ProLayout, { PageContainer } from '@ant-design/pro-layout';
 import {
   DashboardOutlined,
   FundOutlined,
   ToolOutlined,
   BellOutlined,
+  CheckCircleOutlined,
+  ShoppingOutlined,
 } from '@ant-design/icons';
 import Dashboard from './pages/Dashboard';
 import WaterQuality from './pages/WaterQuality';
 import Equipment from './pages/Equipment';
 import AlarmCenter from './pages/AlarmCenter';
-
-const { Header, Content, Sider } = Layout;
+import Inspection from './pages/Inspection';
+import Chemical from './pages/Chemical';
 
 const App: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
 
-  const menuItems = [
+  const menuData = [
     {
-      key: '/',
+      path: '/',
+      name: '总览仪表盘',
       icon: <DashboardOutlined />,
-      label: '总览仪表盘',
     },
     {
-      key: '/water-quality',
+      path: '/water-quality',
+      name: '水质数据管理',
       icon: <FundOutlined />,
-      label: '水质数据管理',
     },
     {
-      key: '/equipment',
+      path: '/equipment',
+      name: '设备管理',
       icon: <ToolOutlined />,
-      label: '设备管理',
     },
     {
-      key: '/alarms',
+      path: '/inspection',
+      name: '巡检管理',
+      icon: <CheckCircleOutlined />,
+    },
+    {
+      path: '/chemical',
+      name: '药剂库存管理',
+      icon: <ShoppingOutlined />,
+    },
+    {
+      path: '/alarms',
+      name: '报警中心',
       icon: <BellOutlined />,
-      label: '报警中心',
     },
   ];
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider
-        breakpoint="lg"
-        collapsedWidth="0"
-        style={{ background: colorBgContainer }}
+    <div style={{ height: '100vh' }}>
+      <ProLayout
+        title="污水运维平台"
+        logo="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
+        route={{
+          routes: menuData,
+        }}
+        menuItemRender={(itemProps, defaultDom) => (
+          <a onClick={() => navigate(itemProps.path || '/')}>{defaultDom}</a>
+        )}
+        location={{ pathname: location.pathname }}
       >
-        <div
-          style={{
-            height: 64,
-            margin: 16,
-            background: 'linear-gradient(135deg, #1890ff 0%, #096dd9 100%)',
-            borderRadius: borderRadiusLG,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff',
-            fontSize: 16,
-            fontWeight: 'bold',
+        <PageContainer
+          header={{
+            title: menuData.find((m) => m.path === location.pathname)?.name || '污水处理站运维管理平台',
           }}
         >
-          污水运维平台
-        </div>
-        <Menu
-          mode="inline"
-          selectedKeys={[location.pathname]}
-          items={menuItems}
-          onClick={({ key }) => navigate(key)}
-        />
-      </Sider>
-      <Layout>
-        <Header style={{ padding: '0 24px', background: colorBgContainer }}>
-          <h2 style={{ margin: 0, lineHeight: '64px' }}>
-            {menuItems.find((item) => item.key === location.pathname)?.label ||
-              '污水处理站运维管理平台'}
-          </h2>
-        </Header>
-        <Content style={{ margin: '24px', padding: 24, minHeight: 280, background: colorBgContainer, borderRadius: borderRadiusLG }}>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/water-quality" element={<WaterQuality />} />
             <Route path="/equipment" element={<Equipment />} />
+            <Route path="/inspection" element={<Inspection />} />
+            <Route path="/chemical" element={<Chemical />} />
             <Route path="/alarms" element={<AlarmCenter />} />
           </Routes>
-        </Content>
-      </Layout>
-    </Layout>
+        </PageContainer>
+      </ProLayout>
+    </div>
   );
 };
 
